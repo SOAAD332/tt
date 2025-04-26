@@ -1,0 +1,944 @@
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة الروايات - أفضل الكتب الأدبية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        nav {
+            background-color: #34495e;
+            padding: 10px;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        nav ul li a:hover {
+            color: #f1c40f;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .book-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .book-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .book-info {
+            padding: 15px;
+        }
+        
+        .book-title {
+            font-size: 18px;
+            margin: 0 0 10px;
+            color: #2c3e50;
+        }
+        
+        .original-title {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin: 0 0 5px;
+            font-style: italic;
+        }
+        
+        .book-author {
+            color: #7f8c8d;
+            margin: 0 0 5px;
+        }
+        
+        .translator-info {
+            color: #7f8c8d;
+            margin: 0 0 10px;
+            font-size: 14px;
+        }
+        
+        .book-price {
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 0 0 10px;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .search-bar {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .search-bar input {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* جدول آراء العملاء */
+        .reviews-section {
+            margin: 40px 0;
+        }
+        
+        .reviews-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .reviews-table th, .reviews-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .reviews-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .reviews-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .rating {
+            color: #f1c40f;
+            font-weight: bold;
+        }
+        
+        .customer-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .review-date {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        /* أيقونة السلة */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        
+        /* نافذة تفاصيل الكتاب */
+        .book-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1001;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .book-details {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .book-details-cover {
+            flex: 1;
+        }
+        
+        .book-details-cover img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        
+        .book-details-info {
+            flex: 2;
+        }
+        
+        /* نموذج الاتصال */
+        .contact-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin-left: 10px;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+        
+        /* التنبيهات */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #2ecc71;
+            color: white;
+            border-radius: 4px;
+            display: none;
+            z-index: 1002;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .book-list {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .book-details {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- أيقونة السلة -->
+    <div class="cart-icon" id="cartIcon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+
+    <!-- تنبيهات -->
+    <div class="alert" id="alert"></div>
+
+    <!-- نافذة تفاصيل الكتاب -->
+    <div class="book-modal" id="bookModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="book-details">
+                <div class="book-details-cover">
+                    <img id="modalBookCover" src="" alt="غلاف الكتاب">
+                </div>
+                <div class="book-details-info">
+                    <h2 id="modalBookTitle"></h2>
+                    <p class="original-title" id="modalOriginalTitle"></p>
+                    <p><strong>المؤلف:</strong> <span id="modalBookAuthor"></span></p>
+                    <p id="modalTranslator"><strong>المترجم:</strong> <span id="modalTranslatorName"></span></p>
+                    <p><strong>السعر:</strong> <span id="modalBookPrice"></span></p>
+                    <p><strong>الوصف:</strong> <span id="modalBookDescription"></span></p>
+                    <button class="btn" id="addToCartBtn">إضافة إلى السلة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <h1>مكتبة الروايات العربية والعالمية</h1>
+        <p>أكبر مجموعة من الكتب الأدبية والروايات المميزة</p>
+        <img src="photo/مكتبة.jpeg" alt="صورة مكتبة">
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#">الرئيسية</a></li>
+            <li><a href="#">الروايات العربية</a></li>
+            <li><a href="#">الروايات العالمية</a></li>
+            <li><a href="#">أحدث الإصدارات</a></li>
+            <li><a href="#">عروض خاصة</a></li>
+            <li><a href="#contact">اتصل بنا</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="ابحث عن رواية أو كاتب...">
+            <button class="btn" id="searchBtn">بحث</button>
+        </div>
+        
+        <h2>أحدث الروايات</h2>
+        <div class="book-list" id="latestBooks">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+        
+        <h2>الروايات الأكثر مبيعاً</h2>
+        <div class="book-list" id="bestSellers">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+
+        <div class="translated-books">
+            <h2>الروايات العالمية المترجمة</h2>
+            <div class="book-list" id="translatedBooks">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+        </div>
+        
+        <div class="reviews-section">
+            <h2>آراء عملائنا</h2>
+            <table class="reviews-table" id="reviewsTable">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </table>
+        </div>
+        
+        <section id="contact" class="contact-form">
+            <h2><i class="fas fa-envelope"></i> اتصل بنا</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">الاسم</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">الرسالة</label>
+                    <textarea id="message" required></textarea>
+                </div>
+                <button type="submit" class="btn">إرسال</button>
+            </form>
+            
+            <div style="margin-top: 30px;">
+                <h5><i class="fas fa-info-circle"></i> معلومات الاتصال</h5>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i> العنوان: شارع طلعت حرب ، الجيزة<br>
+                    <i class="fas fa-phone"></i> الهاتف: +966112345678<br>
+                    <i class="fas fa-envelope"></i> البريد الإلكتروني: msoaad887@gmail.com
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div style="margin-bottom: 20px;">
+            <h5>النشرة البريدية</h5>
+            <div style="display: flex; justify-content: center;">
+                <input type="email" id="newsletterEmail" placeholder="بريدك الإلكتروني" style="padding: 10px; width: 300px; border: 1px solid #ddd; border-radius: 4px 0 0 4px;">
+                <button class="btn" id="subscribeBtn" style="border-radius: 0 4px 4px 0;">اشترك</button>
+            </div>
+        </div>
+        <hr>
+        <p>© 2025 مكتبة الروايات. جميع الحقوق محفوظة.</p>
+        <p>تابعنا على وسائل التواصل الاجتماعي: 
+            <a href="#" style="color: #f1c40f;"><i class="fab fa-twitter"></i></a>
+            <a href="#" style="color: #f1c40f;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="color: #f1c40f;"><i class="fab fa-instagram"></i></a>
+        </p>
+    </footer>
+
+    <script>
+        // بيانات الكتب
+        const booksData = [
+            {
+                id: 1,
+                title: "سيدة المقام",
+                author: "واسيني الأعرج",
+                price: 15.99,
+                cover: "photo/سيدة المقام.jpeg",
+                description: "رواية تحكي قصة امرأة جزائرية تعيش في فرنسا وتحاول التوفيق بين هويتها العربية وواقعها الغربي.",
+                category: "latest",
+                rating: 5
+            },
+            {
+                id: 2,
+                title: "1984",
+                author: "جورج أورويل",
+                price: 12.50,
+                cover: "photo/1984.jpeg",
+                description: "رواية ديستوبية تصور مستقبلاً كابوسياً حيث تحكم الحكومة كل جوانب الحياة وتسيطر على الأفكار.",
+                category: "latest",
+                rating: 4
+            },
+            {
+                id: 3,
+                title: "اللص والكلاب",
+                author: "نجيب محفوظ",
+                price: 10.00,
+                cover: "photo/اللص و الكلاب.jpeg",
+                description: "رواية تحكي قصة سجين سابق يخرج من السجن ليجد أن زوجته قد خانتة وصديقه قد خانه.",
+                category: "latest",
+                rating: 5
+            },
+            {
+                id: 4,
+                title: "الجريمة والعقاب",
+                originalTitle: "Crime and Punishment",
+                author: "فيودور دوستويفسكي",
+                translator: "سامي الدروبي",
+                price: 14.99,
+                cover: "photo/الجريمة و العقاب.jpeg",
+                description: "رواية فلسفية نفسية تحكي قصة طالب فقير يرتكب جريمة قتل ثم يعاني من تبعاتها النفسية والأخلاقية.",
+                category: "translated",
+                rating: 5
+            },
+            {
+                id: 5,
+                title: "الخيميائي",
+                author: "باولو كويلو",
+                price: 11.25,
+                cover: "photo/خيخمائي.jpeg",
+                description: "رواية تحكي رحلة راعي أغنام أندلسي شاب في بحثه عن كنز أحلامه في مصر.",
+                category: "bestSeller",
+                rating: 4
+            },
+            {
+                id: 6,
+                title: "مدن الملح",
+                author: "عبد الرحمن منيف",
+                price: 18.00,
+                cover: "photo/مدن الملح.jpeg",
+                description: "ملحمة روائية تتناول تأثير اكتشاف النفط على المجتمع العربي التقليدي.",
+                category: "bestSeller",
+                rating: 5
+            },
+            {
+                id: 7,
+                title: "البؤساء",
+                originalTitle: "Les Misérables",
+                author: "فيكتور هوجو",
+                translator: "منير البعلبكي",
+                price: 16.50,
+                cover: "photo/البؤساء.jpeg",
+                description: "رواية كلاسيكية تروي قصة جان فالجان السجين السابق وحياته بعد خروجه من السجن.",
+                category: "translated",
+                rating: 3
+            },
+            {
+                id: 8,
+                title: "ثلاثية غرناطة",
+                author: "رضوى عاشور",
+                price: 13.99,
+                cover: "photo/ثلاثية غرناطة4.jpeg",
+                description: "ثلاثية روائية تحكي قصة سقوط غرناطة آخر معاقل المسلمين في الأندلس.",
+                category: "bestSeller",
+                rating: 5
+            },
+            {
+                id: 9,
+                title: "العجوز والبحر",
+                originalTitle: "The Old Man and the Sea",
+                author: "إرنست همنجواي",
+                translator: "محمد عصفور",
+                price: 10.25,
+                cover: "photo/العجوز و البحر.jpeg",
+                description: "رواية قصيرة تصور صراع صياد عجوز مع سمكة كبيرة في البحر.",
+                category: "translated",
+                rating: 4
+            },
+            {
+                id: 10,
+                title: "الغريب",
+                originalTitle: "L'Étranger",
+                author: "ألبير كامو",
+                translator: "عايدة مطرجي ادريس",
+                price: 9.99,
+                cover: "photo/الغريب.jpg",
+                description: "رواية فلسفية تحكي قصة موظف فرنسي في الجزائر يرتكب جريمة قتل دون سبب واضح.",
+                category: "translated",
+                rating: 5
+            },
+            {
+                id: 11,
+                title: "مائة عام من العزلة",
+                originalTitle: "Cien años de soledad",
+                author: "غابرييل غارثيا ماركيث",
+                translator: "صالح علماني",
+                price: 18.75,
+                cover: "photo/مائة عام من العزلة.jpeg",
+                description: "رواية سحرية واقعية تحكي قصة عائلة بوينديا على مدى عدة أجيال في قرية ماكوندو.",
+                category: "translated",
+                rating: 5
+            },
+            {
+                id: 12,
+                title: "الإخوة كارامازوف",
+                originalTitle: "Братья Карамазовы",
+                author: "فيودور دوستويفسكي",
+                translator: "سامي الدروبي",
+                price: 19.99,
+                cover: "photo/الاخوة كارما زوف.jpeg",
+                description: "رواية فلسفية عميقة تتناول الصراعات الأخلاقية والدينية بين ثلاثة إخوة وأبيهم.",
+                category: "translated",
+                rating: 5
+            }
+        ];
+
+        // آراء العملاء
+        const reviewsData = [
+            {
+                book: "سيدة المقام",
+                rating: 5,
+                comment: "رواية رائعة بأسلوب شيق وسرد ممتع، أنصح بها كل محبي الأدب العربي",
+                customer: "أحمد محمد",
+                date: "15 مارس 2023"
+            },
+            {
+                book: "الخيميائي",
+                rating: 4,
+                comment: "قصة ملهمة ولكن الترجمة العربية يمكن أن تكون أفضل",
+                customer: "سارة عبد الله",
+                date: "10 فبراير 2023"
+            },
+            {
+                book: "1984",
+                rating: 5,
+                comment: "رواية خالدة تتنبأ بالكثير من أحداث عصرنا الحالي، يجب قراءتها",
+                customer: "خالد سمير",
+                date: "5 يناير 2023"
+            },
+            {
+                book: "ثلاثية غرناطة",
+                rating: 5,
+                comment: "عمل أدبي رائع يقدم صورة حية لتاريخ الأندلس، شكرًا لمكتبتكم على التوصية",
+                customer: "نورا أحمد",
+                date: "20 ديسمبر 2022"
+            },
+            {
+                book: "البؤساء",
+                rating: 3,
+                comment: "قصة مؤثرة ولكن النسخة المترجمة طويلة جدًا وقد تكون مملة أحيانًا",
+                customer: "محمود علي",
+                date: "1 نوفمبر 2022"
+            }
+        ];
+
+        // متغيرات DOM
+        const latestBooksContainer = document.getElementById('latestBooks');
+        const bestSellersContainer = document.getElementById('bestSellers');
+        const translatedBooksContainer = document.getElementById('translatedBooks');
+        const reviewsTable = document.getElementById('reviewsTable');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCount = document.getElementById('cartCount');
+        const bookModal = document.getElementById('bookModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalBookCover = document.getElementById('modalBookCover');
+        const modalBookTitle = document.getElementById('modalBookTitle');
+        const modalOriginalTitle = document.getElementById('modalOriginalTitle');
+        const modalBookAuthor = document.getElementById('modalBookAuthor');
+        const modalTranslator = document.getElementById('modalTranslator');
+        const modalTranslatorName = document.getElementById('modalTranslatorName');
+        const modalBookPrice = document.getElementById('modalBookPrice');
+        const modalBookDescription = document.getElementById('modalBookDescription');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        const alertBox = document.getElementById('alert');
+        const contactForm = document.getElementById('contactForm');
+        const newsletterEmail = document.getElementById('newsletterEmail');
+        const subscribeBtn = document.getElementById('subscribeBtn');
+
+        // سلة التسوق
+        let cart = [];
+        let currentBook = null;
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // عرض الكتب
+            displayBooks();
+            
+            // عرض آراء العملاء
+            displayReviews();
+            
+            // البحث
+            searchBtn.addEventListener('click', searchBooks);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchBooks();
+                }
+            });
+            
+            // فتح/غلق نافذة تفاصيل الكتاب
+            closeModal.addEventListener('click', function() {
+                bookModal.style.display = 'none';
+            });
+            
+            // النقر خارج محتوى النافذة يغلقها
+            bookModal.addEventListener('click', function(e) {
+                if (e.target === bookModal) {
+                    bookModal.style.display = 'none';
+                }
+            });
+            
+            // أيقونة السلة
+            cartIcon.addEventListener('click', function() {
+                showAlert(`لديك ${cart.length} عنصر في السلة`);
+            });
+            
+            // نموذج الاتصال
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                showAlert(`شكراً ${name}، تم استلام رسالتك وسنتواصل معك قريباً`);
+                contactForm.reset();
+            });
+            
+            // النشرة البريدية
+            subscribeBtn.addEventListener('click', function() {
+                if (newsletterEmail.value) {
+                    showAlert(`شكراً للاشتراك في نشرتنا البريدية باستخدام ${newsletterEmail.value}`);
+                    newsletterEmail.value = '';
+                } else {
+                    showAlert('الرجاء إدخال بريدك الإلكتروني', 'error');
+                }
+            });
+        });
+
+        // عرض الكتب
+        function displayBooks() {
+            latestBooksContainer.innerHTML = '';
+            bestSellersContainer.innerHTML = '';
+            translatedBooksContainer.innerHTML = '';
+            
+            booksData.forEach(book => {
+                const bookElement = createBookElement(book);
+                
+                if (book.category === 'latest') {
+                    latestBooksContainer.appendChild(bookElement);
+                } else if (book.category === 'bestSeller') {
+                    bestSellersContainer.appendChild(bookElement);
+                } else if (book.category === 'translated') {
+                    translatedBooksContainer.appendChild(bookElement);
+                }
+            });
+        }
+
+        // إنشاء عنصر كتاب
+        function createBookElement(book) {
+            const bookCard = document.createElement('div');
+            bookCard.className = 'book-card';
+            bookCard.dataset.id = book.id;
+            
+            let originalTitleHtml = '';
+            if (book.originalTitle) {
+                originalTitleHtml = `<p class="original-title">(${book.originalTitle})</p>`;
+            }
+            
+            let translatorHtml = '';
+            if (book.translator) {
+                translatorHtml = `<p class="translator-info">ترجمة: ${book.translator}</p>`;
+            }
+            
+            bookCard.innerHTML = `
+                <img src="${book.cover}" alt="${book.title}" class="book-cover">
+                <div class="book-info">
+                    <h3 class="book-title">${book.title}</h3>
+                    ${originalTitleHtml}
+                    <p class="book-author">مؤلف: ${book.author}</p>
+                    ${translatorHtml}
+                    <p class="book-price">$${book.price.toFixed(2)}</p>
+                    <button class="btn add-to-cart-btn">إضافة إلى السلة</button>
+                </div>
+            `;
+            
+            // حدث النقر على الكتاب
+            bookCard.addEventListener('click', function(e) {
+                // إذا كان النقر على زر الإضافة إلى السلة، لا نفتح التفاصيل
+                if (e.target.classList.contains('add-to-cart-btn')) {
+                    e.stopPropagation();
+                    addToCart(book);
+                    return;
+                }
+                
+                showBookDetails(book);
+            });
+            
+            return bookCard;
+        }
+
+        // عرض تفاصيل الكتاب
+        function showBookDetails(book) {
+            currentBook = book;
+            
+            modalBookCover.src = book.cover;
+            modalBookTitle.textContent = book.title;
+            
+            if (book.originalTitle) {
+                modalOriginalTitle.textContent = `(${book.originalTitle})`;
+                modalOriginalTitle.style.display = 'block';
+            } else {
+                modalOriginalTitle.style.display = 'none';
+            }
+            
+            modalBookAuthor.textContent = book.author;
+            
+            if (book.translator) {
+                modalTranslatorName.textContent = book.translator;
+                modalTranslator.style.display = 'block';
+            } else {
+                modalTranslator.style.display = 'none';
+            }
+            
+            modalBookPrice.textContent = `$${book.price.toFixed(2)}`;
+            modalBookDescription.textContent = book.description;
+            
+            // تحديث زر الإضافة إلى السلة
+            const inCart = cart.some(item => item.id === book.id);
+            addToCartBtn.textContent = inCart ? 'مضاف إلى السلة' : 'إضافة إلى السلة';
+            addToCartBtn.disabled = inCart;
+            addToCartBtn.style.backgroundColor = inCart ? '#2ecc71' : '#e74c3c';
+            
+            bookModal.style.display = 'block';
+        }
+
+        // إضافة كتاب إلى السلة
+        function addToCart(book) {
+            const alreadyInCart = cart.some(item => item.id === book.id);
+            
+            if (alreadyInCart) {
+                showAlert('هذا الكتاب مضاف بالفعل إلى السلة', 'info');
+                return;
+            }
+            
+            cart.push(book);
+            updateCartCount();
+            showAlert(`تمت إضافة "${book.title}" إلى السلة`);
+            
+            // إذا كانت نافذة التفاصيل مفتوحة، نحدث الزر
+            if (currentBook && currentBook.id === book.id) {
+                addToCartBtn.textContent = 'مضاف إلى السلة';
+                addToCartBtn.disabled = true;
+                addToCartBtn.style.backgroundColor = '#2ecc71';
+            }
+        }
+
+        // تحديث عدد العناصر في السلة
+        function updateCartCount() {
+            cartCount.textContent = cart.length;
+            
+            // تأثير عند الإضافة
+            cartCount.style.transform = 'scale(1.5)';
+            setTimeout(() => {
+                cartCount.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // البحث عن الكتب
+        function searchBooks() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (!searchTerm) {
+                displayBooks();
+                return;
+            }
+            
+            const filteredBooks = booksData.filter(book => 
+                book.title.toLowerCase().includes(searchTerm) || 
+                book.author.toLowerCase().includes(searchTerm) ||
+                (book.originalTitle && book.originalTitle.toLowerCase().includes(searchTerm)) ||
+                (book.translator && book.translator.toLowerCase().includes(searchTerm))
+            );
+            
+            latestBooksContainer.innerHTML = '';
+            bestSellersContainer.innerHTML = '';
+            translatedBooksContainer.innerHTML = '';
+            
+            if (filteredBooks.length === 0) {
+                latestBooksContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">لا توجد نتائج مطابقة للبحث</p>';
+                return;
+            }
+            
+            filteredBooks.forEach(book => {
+                const bookElement = createBookElement(book);
+                latestBooksContainer.appendChild(bookElement);
+            });
+        }
+
+        // عرض آراء العملاء
+        function displayReviews() {
+            const tbody = document.createElement('tbody');
+            
+            reviewsData.forEach(review => {
+                const row = document.createElement('tr');
+                
+                // إنشاء تقييم بالنجوم
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    stars += i < review.rating ? '★' : '☆';
+                }
+                
+                row.innerHTML = `
+                    <td>${review.book}</td>
+                    <td class="rating">${stars}</td>
+                    <td>${review.comment}</td>
+                    <td class="customer-name">${review.customer}</td>
+                    <td class="review-date">${review.date}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            reviewsTable.appendChild(tbody);
+        }
+
+        // عرض تنبيه
+        function showAlert(message, type = 'success') {
+            alertBox.textContent = message;
+            
+            // تحديد لون التنبيه حسب النوع
+            switch(type) {
+                case 'error':
+                    alertBox.style.backgroundColor = '#e74c3c';
+                    break;
+                case 'info':
+                    alertBox.style.backgroundColor = '#3498db';
+                    break;
+                default:
+                    alertBox.style.backgroundColor = '#2ecc71';
+            }
+            
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
